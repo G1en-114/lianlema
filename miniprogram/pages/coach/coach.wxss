@@ -1,0 +1,99 @@
+.coach-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: 20rpx 24rpx calc(env(safe-area-inset-bottom) + 20rpx);
+  box-sizing: border-box;
+}
+
+.offline-tip {
+  padding: 16rpx 24rpx;
+  margin-bottom: 16rpx;
+  font-size: 24rpx;
+}
+
+.msgs {
+  flex: 1;
+  min-height: 0;
+}
+
+.bubble-row {
+  display: flex;
+  margin-bottom: 20rpx;
+}
+
+.bubble-row-user {
+  justify-content: flex-end;
+}
+
+.bubble {
+  max-width: 78%;
+  background: #ffffff;
+  border-radius: 20rpx;
+  padding: 20rpx 24rpx;
+  font-size: 28rpx;
+  line-height: 1.6;
+  box-shadow: 0 2rpx 8rpx rgba(31, 41, 55, 0.06);
+}
+
+.bubble-user {
+  background: var(--brand);
+  color: #ffffff;
+}
+
+.sug {
+  margin-top: 14rpx;
+  padding-top: 14rpx;
+  border-top: 1rpx solid rgba(127, 127, 127, 0.18);
+}
+
+.bubble-user .sug {
+  border-top-color: rgba(255, 255, 255, 0.35);
+}
+
+.sug-item {
+  font-size: 25rpx;
+  margin-top: 6rpx;
+  opacity: 0.92;
+}
+
+.src {
+  margin-top: 10rpx;
+  font-size: 20rpx;
+  opacity: 0.55;
+}
+
+.quick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14rpx;
+  padding: 14rpx 0;
+}
+
+.quick-chip {
+  padding: 12rpx 26rpx;
+  background: #ffffff;
+  border: 1rpx solid var(--brand-weak);
+  color: var(--brand);
+  border-radius: 999rpx;
+  font-size: 25rpx;
+}
+
+.input-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding-top: 16rpx;
+}
+
+.input {
+  flex: 1;
+  background: #ffffff;
+  border-radius: 16rpx;
+  padding: 18rpx 24rpx;
+  font-size: 28rpx;
+}
+
+.send-btn {
+  flex-shrink: 0;
+}

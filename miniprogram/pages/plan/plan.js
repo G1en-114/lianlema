@@ -1,6 +1,9 @@
 const app = getApp();
 const store = require('../../store/appStore');
 const config = require('../../config');
+const { computeStreak } = require('../../core/streak');
+const { dailyPicks } = require('../../core/dailyPicks');
+const { modelService } = require('../../providers/model/modelServiceProvider');
 
 function dayDiff(aIso, bIso) {
   const a = new Date(aIso);
@@ -20,6 +23,13 @@ Page({
     weekStrip: [],
     remainingFreeText: '',
     canStart: true,
+    streakDays: 0,
+    pickTitle: '',
+    pickMinutes: 0,
+    pickFocus: '',
+    pickItems: [],
+    pickNote: '',
+    cloudBadge: '',
   },
 
   onShow() {
@@ -29,6 +39,33 @@ Page({
 
   refresh() {
     const s = store.getState();
+    const pick = dailyPicks();
+    const streakDays = computeStreak(s.sessions);
+
+    let cloudBadge = '未连接云端模型服务';
+    if (modelService.available()) {
+      modelService
+        .status()
+        .then((st) => {
+          const on = [];
+          if (st.stgcn) on.push('ST-GCN');
+          if (st.vlm) on.push('VLM');
+          if (st.llm) on.push('LLM');
+          this.setData({ cloudBadge: on.length ? `云端 AI 已就绪：${on.join(' · ')}` : '云端模型未配置（端侧可用）' });
+        })
+        .catch(() => this.setData({ cloudBadge: '云端模型服务不可达（端侧可用）' }));
+    }
+
+    this.setData({
+      streakDays,
+      pickTitle: pick.primary.title,
+      pickMinutes: pick.primary.minutes,
+      pickFocus: pick.primary.focus,
+      pickItems: pick.primary.items,
+      pickNote: pick.note,
+      cloudBadge,
+    });
+
     if (!s.assessment || !s.plan) {
       this.setData({ hasAssessment: false });
       return;
@@ -62,6 +99,15 @@ Page({
 
   goAssessment() {
     wx.navigateTo({ url: '/pages/assessment/assessment' });
+  },
+
+  goCoach() {
+    wx.navigateTo({ url: '/pages/coach/coach' });
+  },
+
+  startPick() {
+    // 微训练不占训练额度、不开摄像头：直接跳 AI 教练跟练。
+    wx.navigateTo({ url: '/pages/coach/coach?prompt=' + encodeURIComponent('带我练' + this.data.pickTitle) });
   },
 
   startTraining() {

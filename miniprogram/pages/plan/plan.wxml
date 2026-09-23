@@ -10,6 +10,34 @@
     </block>
   </view>
 
+  <!-- 每日打卡连胜（智能日常：习惯环） -->
+  <view class="card streak-card" bindtap="goCoach">
+    <view class="streak-left">
+      <view class="streak-num">{{streakDays}}</view>
+      <view class="streak-label">天连续打卡</view>
+    </view>
+    <view class="streak-right">
+      <view class="streak-title">🤖 AI 教练在线</view>
+      <view class="muted streak-sub">{{cloudBadge}}</view>
+    </view>
+  </view>
+
+  <!-- 今日微训练推荐（按时间段确定性推荐） -->
+  <view class="card pick-card">
+    <view class="pick-head">
+      <view class="card-title">现在适合 · {{pickTitle}}</view>
+      <view class="pick-min">{{pickMinutes}} 分钟</view>
+    </view>
+    <view class="muted">{{pickFocus}} · {{pickNote}}</view>
+    <view class="pick-items">
+      <view wx:for="{{pickItems}}" wx:key="*this" class="pick-item">{{item}}</view>
+    </view>
+    <view class="pick-actions">
+      <button class="btn btn-primary pick-btn" size="mini" bindtap="startPick">带我练</button>
+      <button class="btn btn-plain pick-btn" size="mini" bindtap="goCoach">问教练</button>
+    </view>
+  </view>
+
   <block wx:if="{{hasAssessment}}">
     <scroll-view scroll-x class="week-strip" enhanced show-scrollbar="{{false}}">
       <view

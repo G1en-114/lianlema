@@ -15,4 +15,9 @@ module.exports = {
   // 开启步骤见 README《启用 AI 文案润色》：需配置云环境 + 部署 llmcoach 云函数。
   // 红线不变：AI 仅润色表达，动作分/计划等数值永远来自确定性模块，模板永远兜底。
   ENABLE_AI_TEXT: false,
+  // ---- 云端模型服务（天猫黑客松 AI 服务版）----
+  // backend 模型服务的基地址，如 http://127.0.0.1:8000 ；留空 = 未连接（全部 UI 自动降级）。
+  // MODEL_SERVICE_API_KEY：backend 配置 MODEL_SERVICE_API_KEYS 后在此填对应 key。
+  MODEL_SERVICE_BASE_URL: '',
+  MODEL_SERVICE_API_KEY: '',
 };

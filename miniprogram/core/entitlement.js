@@ -4,12 +4,12 @@
  */
 
 /**
- * @typedef {{tier:'free'|'pro', freeQuotaUsed:number}} Entitlement
+ * @typedef {{tier:'free'|'pro', freeQuotaUsed:number, cloudCredits:number}} Entitlement
  */
 
 /** @returns {Entitlement} */
 function newEntitlement() {
-  return { tier: 'free', freeQuotaUsed: 0 };
+  return { tier: 'free', freeQuotaUsed: 0, cloudCredits: 0 };
 }
 
 /**
@@ -51,6 +51,33 @@ function restorePro(ent) {
   return ent;
 }
 
+// ---- 云端模型服务额度（天猫黑客松 AI 服务版） ----
+// 免费用户消耗 cloudCredits（加油包），Pro 订阅云端不限次。
+
+/** Pro 云端不限次；免费返回剩余云端次数（旧存量数据无该字段时视为 0）。 */
+function remainingCloudCredits(ent) {
+  if (ent.tier === 'pro') return Infinity;
+  return ent.cloudCredits || 0;
+}
+
+/** 是否允许调用云端模型服务（false = 引导订阅/购买加油包）。 */
+function canUseCloud(ent) {
+  return remainingCloudCredits(ent) > 0;
+}
+
+/** 购买加油包：增加 n 次云端额度（叠加不清零）。 */
+function addCloudCredits(ent, n) {
+  return { ...ent, cloudCredits: (ent.cloudCredits || 0) + n };
+}
+
+/** 消耗一次云端额度；Pro 不计，免费不足时原样返回（调用方需先查 canUseCloud）。 */
+function consumeCloudCredit(ent) {
+  if (ent.tier === 'pro') return ent;
+  const left = ent.cloudCredits || 0;
+  if (left <= 0) return ent;
+  return { ...ent, cloudCredits: left - 1 };
+}
+
 module.exports = {
   newEntitlement,
   remainingFree,
@@ -58,4 +85,8 @@ module.exports = {
   consumeQuota,
   grantPro,
   restorePro,
+  remainingCloudCredits,
+  canUseCloud,
+  addCloudCredits,
+  consumeCloudCredit,
 };

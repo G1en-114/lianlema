@@ -73,3 +73,85 @@
   text-align: center;
   color: var(--brand);
 }
+
+/* ---- 每日打卡连胜卡（智能日常：习惯环） ---- */
+.streak-card {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+}
+
+.streak-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-right: 24rpx;
+  border-right: 2rpx solid var(--line);
+  min-width: 140rpx;
+}
+
+.streak-num {
+  font-size: 56rpx;
+  font-weight: 700;
+  color: var(--brand);
+  line-height: 1.1;
+}
+
+.streak-label {
+  font-size: 22rpx;
+  color: var(--ink-2);
+}
+
+.streak-right {
+  flex: 1;
+}
+
+.streak-title {
+  font-size: 30rpx;
+  font-weight: 600;
+}
+
+.streak-sub {
+  margin-top: 6rpx;
+  font-size: 22rpx;
+}
+
+/* ---- 今日微训练推荐卡 ---- */
+.pick-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pick-min {
+  font-size: 24rpx;
+  color: var(--brand);
+  background: var(--brand-weak);
+  border-radius: 999rpx;
+  padding: 6rpx 20rpx;
+}
+
+.pick-items {
+  margin-top: 16rpx;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.pick-item {
+  font-size: 24rpx;
+  background: var(--bg);
+  border-radius: 12rpx;
+  padding: 10rpx 20rpx;
+  color: var(--ink-2);
+}
+
+.pick-actions {
+  margin-top: 20rpx;
+  display: flex;
+  gap: 16rpx;
+}
+
+.pick-btn {
+  margin: 0;
+}

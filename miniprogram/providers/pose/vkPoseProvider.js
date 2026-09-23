@@ -49,6 +49,13 @@ const vkPoseProvider = {
         : points.map(() => anchor.score == null ? 1 : anchor.score);
 
       const raw = computeAngles(points, confidence);
+
+      // 云端模型服务旁路：透传原始关键点帧（body-18），供云端分析缓冲取数；
+      // 任何异常都不影响端侧主链路。
+      if (opts.onKeypoints) {
+        try { opts.onKeypoints(points); } catch (e) { /* ignore */ }
+      }
+
       // EMA 平滑（α=0.6 抑制抖动）
       if (!smooth) {
         smooth = { angles: { ...raw.angles }, torsoLean: raw.torsoLean, meanConfidence: raw.meanConfidence };

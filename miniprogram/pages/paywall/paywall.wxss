@@ -40,3 +40,44 @@
   text-align: center;
   margin-top: 16rpx;
 }
+
+/* ---- AI 模型服务套餐 ---- */
+.credit-pill {
+  display: inline-block;
+  margin-top: 20rpx;
+  padding: 8rpx 28rpx;
+  background: var(--brand-weak);
+  color: var(--brand);
+  border-radius: 999rpx;
+  font-size: 26rpx;
+}
+
+.tier-card {
+  padding: 28rpx 32rpx;
+}
+
+.tier-current {
+  border: 2rpx solid var(--brand);
+}
+
+.tier-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.tier-name {
+  font-size: 34rpx;
+  font-weight: 700;
+}
+
+.tier-price .price-num {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: var(--brand);
+}
+
+.tier-quota {
+  margin: 8rpx 0 12rpx;
+  font-size: 24rpx;
+}

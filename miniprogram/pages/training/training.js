@@ -7,8 +7,14 @@ const { vkPoseProvider } = require('../../providers/pose/vkPoseProvider');
 const { demoPoseProvider } = require('../../providers/pose/demoPoseProvider');
 const { voiceProvider } = require('../../providers/voice/voiceProvider');
 const coachProvider = require('../../providers/coach/coachProvider');
+const { modelService, toCoco17 } = require('../../providers/model/modelServiceProvider');
+const entitlement = require('../../core/entitlement');
 
 const encourageCounters = { set_done: 0, last_rep: 0, streak_standard: 0, session_end: 0 };
+
+// 云端增强：关键点缓冲上限（约 3 秒 @30fps，ST-GCN 窗口 48 帧的余量）。
+const KP_BUFFER_MAX = 90;
+const CLOUD_PREF_KEY = 'llm_daily_cloud_enhanced';
 
 Page({
   data: {
@@ -29,6 +35,9 @@ Page({
     finished: false,
     voiceAvailable: false,
     recording: false,
+    cloudEnhanced: false,
+    cloudAvailable: modelService.available(),
+    cloudNote: '',
   },
 
   onLoad(options) {
@@ -41,13 +50,19 @@ Page({
     this.provider = null;
     this.restTimer = null;
     this.canvasNode = null;
+    this.kpBuffer = [];
+
+    let cloudEnhanced = false;
+    try {
+      cloudEnhanced = wx.getStorageSync(CLOUD_PREF_KEY) === '1';
+    } catch (e) { /* ignore */ }
 
     const s = store.getState();
     const dayIndex = Number(options.dayIndex) || 1;
     const day = s.plan && s.plan.days.find((d) => d.dayIndex === dayIndex);
     this.exercises = day && !day.isRestDay ? day.exercises : [];
 
-    this.setData({ voiceAvailable: voiceProvider.available });
+    this.setData({ voiceAvailable: voiceProvider.available, cloudEnhanced });
     if (this.exercises.length === 0) {
       wx.showToast({ title: '今天没有安排训练', icon: 'none' });
       setTimeout(() => wx.navigateBack(), 800);
@@ -145,6 +160,7 @@ Page({
         exercise: ex.exercise,
         canvas: this.canvasNode,
         onFrame: (r) => this.handleRepEvent(r.repEvent, r.primaryAngle, r.confidence),
+        onKeypoints: (points) => this.bufferKeypoints(points),
         onError: () => this.startDemo('姿态识别启动失败，已切换演示模式'),
       });
       this.setData({ poseMode: 'vk' });
@@ -172,6 +188,7 @@ Page({
         exercise: ex.exercise,
         canvas: this.canvasNode,
         onFrame: (r) => this.handleRepEvent(r.repEvent, r.primaryAngle, r.confidence),
+        onKeypoints: (points) => this.bufferKeypoints(points),
         onError: () => this.startDemo('姿态识别启动失败，已切换演示模式'),
       });
     } else {
@@ -249,9 +266,76 @@ Page({
     if (done) this.completeSet();
   },
 
+  // ===== 云端 AI 增强（付费模型服务层） =====
+
+  /** 缓冲端侧关键点帧（body-18 原始点），组完成时整段送云端分析。 */
+  bufferKeypoints(points) {
+    if (!this.data.cloudEnhanced) return;
+    this.kpBuffer.push(points);
+    if (this.kpBuffer.length > KP_BUFFER_MAX) this.kpBuffer.shift();
+  },
+
+  /** 切换云端增强：本地记忆偏好；未连接服务时提示并保持关闭。 */
+  toggleCloud() {
+    if (!this.data.cloudAvailable && !this.data.cloudEnhanced) {
+      wx.showToast({ title: '未连接云端模型服务，见 README 配置', icon: 'none' });
+      return;
+    }
+    const cloudEnhanced = !this.data.cloudEnhanced;
+    try { wx.setStorageSync(CLOUD_PREF_KEY, cloudEnhanced ? '1' : '0'); } catch (e) { /* ignore */ }
+    this.setData({ cloudEnhanced, cloudNote: cloudEnhanced ? '云端增强已开启：每组结束后自动复盘' : '' });
+  },
+
+  /** 组完成后的云端复盘：送关键点序列做动作分析 + LLM 生成复盘要点（静默降级）。 */
+  cloudReview(ex) {
+    if (!this.data.cloudEnhanced || !modelService.available()) return;
+
+    const s = store.getState();
+    if (!entitlement.canUseCloud(s.entitlement)) {
+      wx.showModal({
+        title: '云端 AI 额度',
+        content: '云端动作分析需要 Pro 订阅或按次加油包（演示环境模拟解锁）。',
+        confirmText: '去查看',
+        success: (r) => { if (r.confirm) wx.navigateTo({ url: '/pages/paywall/paywall' }); },
+      });
+      return;
+    }
+    const ent = entitlement.consumeCloudCredit(s.entitlement);
+    store.setState({ entitlement: ent });
+    require('../../providers/repo/index').getRepo().saveEntitlement(ent);
+
+    const frames = this.kpBuffer.splice(0).map(toCoco17);
+    const summary = `${ex.name} 第 ${this.setNo} 组完成，共 ${this.data.targetReps} 次`;
+    this.setData({ cloudNote: '☁️ 云端 AI 复盘中…' });
+
+    const analyzePromise = frames.length
+      ? modelService.analyze({ exercise: ex.exercise, frames }).catch(() => null)
+      : Promise.resolve(null);
+
+    analyzePromise.then((vision) => {
+      const facts = [
+        summary,
+        vision && vision.action ? `云端识别动作：${vision.action}（置信度 ${Math.round((vision.action_confidence || 0) * 100)}%）` : '',
+        vision && vision.form ? `标准判定：${vision.form.is_standard ? '达标' : '需改进'}` : '',
+        vision && vision.vlm_assessment ? `快照评述：${vision.vlm_assessment}` : '',
+      ].filter(Boolean);
+      return modelService.chat(
+        [{ role: 'user', content: '请根据以下一组训练的结构化事实，给用户一句话复盘和一条下一组建议。' }],
+        { today_plan: facts.join('；'), exercise: ex.name }
+      ).then((reply) => {
+        const note = `☁️ ${reply.reply}`;
+        this.setData({ cloudNote: note });
+        this.say(reply.reply, 'encourage');
+      });
+    }).catch(() => {
+      this.setData({ cloudNote: '' }); // 云端故障静默降级，不打断训练
+    });
+  },
+
   /** 组间休息 → 下一组/下一动作/结束。 */
   completeSet() {
     const ex = this.exercises[this.exIdx];
+    this.cloudReview(ex);
     if (this.setNo < ex.sets) {
       this.beginRest(ex.restSec, () => {
         this.setNo += 1;
