@@ -21,7 +21,6 @@ Page({
     isRestDay: false,
     exercises: [],
     weekStrip: [],
-    remainingFreeText: '',
     canStart: true,
     streakDays: 0,
     pickTitle: '',
@@ -81,10 +80,6 @@ Page({
       count: d.exercises.length,
     }));
 
-    const freeQuota = config.FREE_QUOTA;
-    const ent = s.entitlement;
-    const remaining = ent.tier === 'pro' ? '∞' : String(Math.max(0, freeQuota - ent.freeQuotaUsed));
-
     this.setData({
       hasAssessment: true,
       todayDay: today,
@@ -92,8 +87,7 @@ Page({
       isRestDay: today.isRestDay,
       exercises: today.exercises,
       weekStrip,
-      remainingFreeText: ent.tier === 'pro' ? 'Pro 会员 · 不限次数' : `免费额度剩 ${remaining}/${freeQuota} 次`,
-      canStart: !today.isRestDay && (ent.tier === 'pro' || ent.freeQuotaUsed < freeQuota),
+      canStart: !today.isRestDay,
     });
   },
 
@@ -115,16 +109,6 @@ Page({
       wx.showToast({ title: '今天是休息日，好好恢复~', icon: 'none' });
       return;
     }
-    const s = store.getState();
-    const ent = s.entitlement;
-    if (ent.tier !== 'pro' && ent.freeQuotaUsed >= config.FREE_QUOTA) {
-      wx.navigateTo({ url: '/pages/paywall/paywall' });
-      return;
-    }
     wx.navigateTo({ url: `/pages/training/training?dayIndex=${this.data.todayDay.dayIndex}` });
-  },
-
-  goPaywall() {
-    wx.navigateTo({ url: '/pages/paywall/paywall' });
   },
 });

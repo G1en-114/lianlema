@@ -5,9 +5,6 @@
       <view class="muted">先花一分钟完成运动评估，我会按你的目标、场地与伤痛情况排好 7 天计划。</view>
       <button class="btn btn-primary" bindtap="goAssessment">开始运动评估</button>
     </block>
-    <block wx:else>
-      <view class="hero-meta">{{remainingFreeText}}</view>
-    </block>
   </view>
 
   <!-- 每日打卡连胜（智能日常：习惯环） -->
@@ -65,9 +62,6 @@
       <button class="btn btn-primary" disabled="{{!canStart}}" bindtap="startTraining">
         {{isRestDay ? '休息日' : '开始训练'}}
       </button>
-      <view wx:if="{{!canStart && !isRestDay}}" class="quota-tip muted" bindtap="goPaywall">
-        免费额度已用完，查看会员权益 →
-      </view>
     </view>
   </block>
 </view>

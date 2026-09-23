@@ -63,12 +63,9 @@ def test_status_reports_capability_matrix(isolated_env) -> None:
     assert body["stgcn"] is False  # 测试环境保持关闭（显式开关）
 
 
-def test_tiers_catalog_shape(isolated_env) -> None:
-    resp = client.get("/api/tiers")
-    assert resp.status_code == 200
-    tiers = resp.json()["tiers"]
-    assert [t["id"] for t in tiers] == ["free", "pro", "booster"]
-    assert all("price" in t and "features" in t for t in tiers)
+def test_tiers_endpoint_removed_no_pricing_surface(isolated_env) -> None:
+    """商业化收敛：定价目录接口已移除（计费售卖留给平台/厂商侧）。"""
+    assert client.get("/api/tiers").status_code == 404
 
 
 # ---- 视觉分析 ----

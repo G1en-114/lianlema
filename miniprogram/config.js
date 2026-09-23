@@ -2,8 +2,8 @@
  * 全局配置开关。
  * - CLOUD_ENV_ID：微信云开发环境 ID。留空 = 纯本地模式（默认，零配置可运行）。
  *   开通方式见 README《启用云开发》。仓库层检测到配置后会自动切换并优雅降级。
- * - FREE_QUOTA：免费用户可开启训练会话的次数上限（Free_Usage_Limit）。
- * - PAID_LABEL：付费墙演示模式标识文案（个人主体无法接微信支付时的合规处理）。
+ * - FREE_QUOTA / PAID_LABEL：权益数据面遗留配置（当前版本无门控、无收费 UI，
+ *   商业化由平台/厂商生态侧接入时再启用）。
  */
 module.exports = {
   CLOUD_ENV_ID: '',

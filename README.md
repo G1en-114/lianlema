@@ -6,15 +6,15 @@
 
 ## 产品一句话
 
-端侧姿态 AI 免费打底、云端大模型按需订阅的随身 AI 教练——AI 不只待在聊天框里：它通过手机摄像头**看着**你训练、在每个时段推荐 1-3 分钟微训练、用连续打卡习惯环陪你把运动变成日常。
+端侧姿态 AI 打底、云端大模型增强的随身 AI 教练——AI 不只待在聊天框里：它通过手机摄像头**看着**你训练、在每个时段推荐 1-3 分钟微训练、用连续打卡习惯环陪你把运动变成日常。
 
 ## 三层 AI 架构（核心）
 
-| 层 | 能力 | 实现 | 售卖 |
-|----|------|------|------|
-| L1 端侧 AI | 姿态识别 + 实时动作纠错（视频不出设备） | `miniprogram/` VKSession + 确定性角度规则 | 免费层 |
-| L2 云端视觉模型 | 自研 ST-GCN 动作识别（11 类）+ 确定性深蹲规则 + VLM 快照评述 | `backend/app/providers/vision/` | 付费层 |
-| L3 LLM 教练大脑 | 对话 / 计划解释 / 组末复盘（OpenAI 兼容：Qwen/DeepSeek/GLM/Ollama） | `backend/app/providers/coach_llm/` | 付费层 |
+| 层 | 能力 | 实现 |
+|----|------|------|
+| L1 端侧 AI | 姿态识别 + 实时动作纠错（视频不出设备） | `miniprogram/` VKSession + 确定性角度规则 |
+| L2 云端视觉模型 | 自研 ST-GCN 动作识别（11 类）+ 确定性深蹲规则 + VLM 快照评述 | `backend/app/providers/vision/` |
+| L3 LLM 教练大脑 | 对话 / 计划解释 / 组末复盘（OpenAI 兼容：Qwen/DeepSeek/GLM/Ollama） | `backend/app/providers/coach_llm/` |
 
 **安全红线**：动作分、计数、标准度等数值永远出自模型或确定性规则；LLM/VLM 只消费结构化事实产文案；任何模型故障自动降级，服务永不 5xx。
 
@@ -22,8 +22,8 @@
 
 | 目录 | 说明 |
 |------|------|
-| `miniprogram/` | 微信小程序（8 页面：计划/AI 教练对话/训练/报告/记录/我的/评估/AI 模型服务套餐） |
-| `backend/` | FastAPI 模型服务（6 组 API：analyze / chat / plan_explain / usage / tiers / status + 用量计量） |
+| `miniprogram/` | 微信小程序（7 页面：计划/AI 教练对话/训练/报告/记录/我的/评估） |
+| `backend/` | FastAPI 模型服务（5 组 API：analyze / chat / plan_explain / usage / status + 用量计量） |
 | `competition-tmall/` | 初赛材料：项目方案 PDF（可再生成）、demo 录屏分镜脚本 |
 | `src/`、`model/` | 基座模型层：RTMPose + ST-GCN（自训模型与训练管线） |
 | `app/`、`doc/` 等 | 基座仓库的 RN App 与模型文档（本定制款未改动） |
@@ -52,7 +52,7 @@ MODEL_SERVICE_BASE_URL: 'http://<电脑局域网IP>:8000',  // 真机需同 WiFi
 MODEL_SERVICE_API_KEY: '',                              // backend 配置 MODEL_SERVICE_API_KEYS 后填写
 ```
 
-打开训练页的「☁️ 云端 AI 增强」开关即可体验付费模型服务链路；`ENABLE_STGCN=1`（需健康 torch 环境）开启自研 ST-GCN 识别，详见 `backend/.env.example`。
+打开训练页的「☁️ 云端 AI 增强」开关即可体验云端大模型增强链路；`ENABLE_STGCN=1`（需健康 torch 环境）开启自研 ST-GCN 识别，详见 `backend/.env.example`。
 
 ## 测试
 
@@ -61,10 +61,9 @@ node --test "test/*.test.js"          # 小程序核心层 50 条（计划/姿�
 cd backend && python -m pytest tests/ # 模型服务 70 条（API/降级/计量/鉴权/角度规则）
 ```
 
-## 商业模式：模型即服务
+## 能力开放与商业化边界
 
-免费版（端侧 + 每日 3 问）→ Pro 订阅 ¥29/月（云端不限次）→ 按次加油包 ¥9.9/10 次。
-计费数据面：API-key 鉴权 + SQLite 用量计量；演示环境为合规明示的模拟解锁，正式版替换微信支付/支付宝凭证校验即可。
+**不设付费墙、不做定价与收费**，所有能力对用户完整开放。模型服务已内置 API-key 鉴权 + SQLite 用量计量（按调用次数与 token），构成对外开放的计量数据面；后续计费售卖由平台/厂商在生态侧接入（如 API-key 对接计费网关），作品侧零改动。
 
 ## 与基座/其他参赛版的关系
 

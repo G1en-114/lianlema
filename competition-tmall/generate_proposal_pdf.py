@@ -72,7 +72,7 @@ story.append(Spacer(1, 0.5 * cm))
 story.append(h1("一、作品概述"))
 story.append(body("小练 Daily 是一个 AI 服务为本体的「每日微训练教练」：手机摄像头就是 AI 教练的眼睛，云端大模型是它的大脑。它不要求用户办卡、买器械、挤出整块时间——而是在每一天的每个时段（晨起、午间、久坐、睡前），用 1-3 分钟的碎片微训练和连续打卡习惯环，把 AI 教练真正放进用户的日常生活，而不只待在聊天框里。"))
 story.append(li("作品形态：微信小程序（演示视频 + 可运行原型）+ 云端模型服务（FastAPI）"))
-story.append(li("一句话定位：端侧姿态 AI 免费打底、云端大模型按需订阅的随身 AI 教练"))
+story.append(li("一句话定位：端侧姿态 AI 打底、云端大模型增强的随身 AI 教练"))
 
 story.append(h1("二、赛道契合：为什么是「智能日常」"))
 story.append(body("赛道原话是「让 AI 真正进入每一天，而不只待在聊天框」，产业灵感方向是手机与穿戴设备。本作品在四个层面直接回应："))
@@ -87,38 +87,29 @@ story.append(table(
     [
         ["健身 App 门槛高", "要器械、要整块时间、要自律", "1-3 分钟微训练 + 零器械 + 分时段推荐"],
         ["聊天框 AI 只会说不会看", "用户比划错了它不知道", "摄像头姿态识别实时纠错，眼睛和大脑都有"],
-        ["私教太贵", "线下一节课数百元", "AI 教练按月订阅 29 元，加油包 9.9 元"],
+        ["私教太贵", "线下一节课数百元", "AI 教练常驻手机，每天几分钟"],
         ["运动 App 不懂你", "千人一面课表", "评估→确定性计划→LLM 解释为什么适合你"],
     ],
     [4.2 * cm, 5.6 * cm, 6.8 * cm],
 ))
 
 story.append(h1("四、AI 架构：三层 AI，服务可售卖（核心创新）"))
-story.append(body("L1 端侧 AI（免费层，隐私优先）：微信 VisionKit VKSession 人体检测在设备上输出关键点，确定性角度规则实时判定动作标准度与计数，视频帧不出设备。"))
-story.append(body("L2 云端视觉模型服务（付费层，自研模型服务化）：自研 RTMPose + ST-GCN 动作识别（仓库内自训模型，11 类健身动作）包装为 POST /api/vision/analyze：端侧上传关键点序列（非视频，隐私友好），云端返回动作类别、置信度与标准度；确定性深蹲角度规则产出标准度判定；多模态 VLM 顾问（OpenAI 兼容协议，Qwen-VL、GLM-4V 可插拔）给出训练快照的文字评述。"))
-story.append(body("L3 LLM 教练大脑（付费层）：OpenAI 兼容协议接入 Qwen、DeepSeek、GLM 或本地 Ollama，驱动 AI 教练对话页、计划个性化解释与组末复盘；LLM 不可用时确定性模板兜底。"))
+story.append(body("L1 端侧 AI（设备侧，隐私优先）：微信 VisionKit VKSession 人体检测在设备上输出关键点，确定性角度规则实时判定动作标准度与计数，视频帧不出设备。"))
+story.append(body("L2 云端视觉模型服务（云端层，自研模型服务化）：自研 RTMPose + ST-GCN 动作识别（仓库内自训模型，11 类健身动作）包装为 POST /api/vision/analyze：端侧上传关键点序列（非视频，隐私友好），云端返回动作类别、置信度与标准度；确定性深蹲角度规则产出标准度判定；多模态 VLM 顾问（OpenAI 兼容协议，Qwen-VL、GLM-4V 可插拔）给出训练快照的文字评述。"))
+story.append(body("L3 LLM 教练大脑（云端层）：OpenAI 兼容协议接入 Qwen、DeepSeek、GLM 或本地 Ollama，驱动 AI 教练对话页、计划个性化解释与组末复盘；LLM 不可用时确定性模板兜底。"))
 story.append(body("安全红线（工程可信度）：动作分、计数、标准度等数值永远出自模型或确定性规则，LLM 与 VLM 只消费结构化事实产文案；任何模型故障（无密钥、网络、解析失败）自动降级，服务永不 5xx。"))
 
-story.append(h1("五、模型服务商业模式（把模型卖给用户）"))
-story.append(table(
-    ["套餐", "价格", "内容"],
-    [
-        ["免费版", "0 元 永久", "端侧姿态识别与纠错、7 天计划与打卡、AI 教练每日 3 问"],
-        ["Pro 订阅", "29 元/月", "云端 ST-GCN 识别、VLM 快照分析、AI 教练无限对话、报告深度解读"],
-        ["按次加油包", "9.9 元/10 次", "云端动作分析按次购买，不过期"],
-    ],
-    [3.4 * cm, 3.2 * cm, 10.0 * cm],
-))
-story.append(body("配套数据面已实现：API-key 鉴权 + SQLite 用量计量（GET /api/usage 按次与 token 汇总），小程序套餐页实时拉取云端目录并展示云端额度余额；演示环境为合规明示的模拟解锁，正式版替换为微信支付或支付宝凭证校验即可。"))
+story.append(h1("五、能力开放与商业化边界"))
+story.append(body("本作品不设付费墙、不做定价与收费——所有能力对用户完整开放。模型服务按「能力开放」设计：已实现 API-key 鉴权与 SQLite 用量计量（GET /api/usage 按调用次数与 token 汇总），构成对外开放的计量数据面；后续的计费与售卖由平台或厂商在生态侧接入（如以 API-key 对接计费网关、套餐目录由厂商下发），作品侧零改动。"))
 
 story.append(h1("六、完成度与验证"))
-story.append(li("小程序 8 个页面全部可运行（新增 AI 教练对话页）；零配置可编译，未连接云端时所有 AI 入口自动降级并有明确标注。"))
-story.append(li("模型服务 6 组 API（analyze、chat、plan_explain、usage、tiers、status）全部实现并带测试。"))
+story.append(li("小程序 7 个页面全部可运行（新增 AI 教练对话页）；零配置可编译，未连接云端时所有 AI 入口自动降级并有明确标注。"))
+story.append(li("模型服务 5 组 API（analyze、chat、plan_explain、usage、status）全部实现并带测试。"))
 story.append(li("测试：Node 端 50 条用例（计划生成、姿态规则、动作分、语音意图、权益、打卡连胜、微训练推荐、COCO 重排）+ 后端 pytest 70 条，全部通过。"))
 story.append(li("演示路径：backend 启动 uvicorn → 小程序 config.js 填 MODEL_SERVICE_BASE_URL → 真机或开发者工具全流程演示。"))
 
 story.append(h1("七、差异化对比"))
-story.append(li("对比 Keep 等健身 App：无免费端侧 AI 纠错层、无对话式教练、无云端模型服务化售卖。"))
+story.append(li("对比 Keep 等健身 App：无端侧 AI 纠错、无对话式教练、无云端大模型增强链路。"))
 story.append(li("对比通用 AI 助手（聊天框）：看不见动作、无确定性数值能力、无习惯环。"))
 story.append(li("对比私教：价格约为五十分之一，且全天候在身边。"))
 
@@ -128,7 +119,7 @@ story.append(body("参赛者为开源项目 github.com/Health-525/lian_le_ma（M
 story.append(h1("九、决赛 48 小时路线图"))
 story.append(li("AIGC 加分项：AI 生成教练示范视频与数字人教练形象（接入视频生成 API，Pro 会员卖点）。"))
 story.append(li("微信运动步数卡：穿戴数据触发微训练推荐，无授权自动隐藏。"))
-story.append(li("真实支付接入评估与云端部署（模型服务公网可达 + 人气评选试用通道）。"))
+story.append(li("云端部署（模型服务公网可达 + 人气评选试用通道）；商业化由平台或厂商生态侧接入，作品侧已备好 API-key 与用量计量数据面。"))
 story.append(li("端云延迟对比演示（同一动作端侧与云端双轨展示）；真机 ST-GCN 冒烟与动作库扩充。"))
 
 story.append(h1("十、团队"))

@@ -1,11 +1,5 @@
 <view class="page safe-bottom">
   <view class="card">
-    <view class="card-title">我的会员</view>
-    <view class="ent-line">{{entitlementText}}</view>
-    <button wx:if="{{!isPro}}" class="btn btn-primary" bindtap="goPaywall">升级 Pro（演示）</button>
-  </view>
-
-  <view class="card">
     <view class="card-title">授权与隐私中心</view>
     <view class="perm-row">
       <view>摄像头（动作纠错）</view>

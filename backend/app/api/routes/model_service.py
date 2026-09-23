@@ -4,8 +4,11 @@
 - ``POST /api/vision/analyze``  云端动作分析（ST-GCN 关键点识别 + 可选 VLM 快照评述）
 - ``POST /api/coach/chat``      LLM 教练对话（模板兜底）
 - ``POST /api/plan/explain``    计划个性化解释（同教练链）
-- ``GET  /api/usage``           用量查询（按 API-key 汇总，支撑售卖计费）
-- ``GET  /api/tiers`` / ``GET /api/status``  套餐目录与服务能力状态
+- ``GET  /api/usage``           用量查询（按 API-key 汇总，为后续计费售卖预留数据面）
+- ``GET  /api/status``          服务能力状态
+
+商业化定位：本作品只提供模型能力与计量数据面，不做定价与收费——
+计费售卖由平台/厂商在生态侧接入（API-key + usage 即接入点）。
 
 设计红线：任何模型故障都降级为桩/模板而非 5xx；
 数值只出自模型或确定性规则，LLM/VLM 文字不参与计分。
@@ -89,41 +92,6 @@ def require_api_key(
     raise HTTPException(status_code=401, detail="invalid or missing X-API-Key")
 
 
-# ---- 套餐目录（售卖面，价格均为演示数据） ----
-
-TIERS = [
-    {
-        "id": "free",
-        "name": "免费版",
-        "price": "¥0",
-        "period": "永久",
-        "quota": "每日 3 次端侧动作分析",
-        "features": ["端侧姿态识别与纠错", "7 天计划与打卡", "AI 教练每日 3 问"],
-    },
-    {
-        "id": "pro",
-        "name": "Pro 订阅",
-        "price": "¥29",
-        "period": "月",
-        "quota": "云端模型服务不限次",
-        "features": [
-            "云端 ST-GCN 动作识别",
-            "多模态快照分析（VLM）",
-            "AI 教练无限对话",
-            "训练报告深度解读",
-        ],
-    },
-    {
-        "id": "booster",
-        "name": "按次加油包",
-        "price": "¥9.9",
-        "period": "10 次云端分析",
-        "quota": "云端动作分析 10 次",
-        "features": ["适合偶尔加练", "云端报告解读", "不过期"],
-    },
-]
-
-
 # ---- 接口 ----
 
 
@@ -184,14 +152,8 @@ def plan_explain(req: PlanExplainRequest, api_key: str = Depends(require_api_key
 
 @router.get("/usage")
 def usage(api_key: str = Depends(require_api_key)):
-    """按 API-key 的用量汇总（调用量 + token），支撑按次计费与额度展示。"""
+    """按 API-key 的用量汇总（调用量 + token）：为后续计费售卖预留的数据面。"""
     return get_meter().summary(api_key)
-
-
-@router.get("/tiers")
-def tiers():
-    """模型服务套餐目录（售卖面）。"""
-    return {"tiers": TIERS}
 
 
 @router.get("/status")

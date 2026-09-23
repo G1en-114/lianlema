@@ -48,11 +48,11 @@
     </view>
     <view wx:if="{{exerciseNote}}" class="regression-note">{{exerciseNote}}</view>
 
-    <!-- 云端 AI 增强（付费模型服务层）：端侧免费，云端按订阅/次数 -->
+    <!-- 云端 AI 增强：端侧识别 + 云端大模型复盘 -->
     <view class="cloud-row" bindtap="toggleCloud">
       <view class="cloud-info">
         <view class="cloud-title">☁️ 云端 AI 增强</view>
-        <view class="muted cloud-sub">{{cloudEnhanced ? '已开启：每组结束后云端复盘' : '端侧识别（免费）· 点此开启云端模型'}}</view>
+        <view class="muted cloud-sub">{{cloudEnhanced ? '已开启：每组结束后云端复盘' : '端侧识别运行中 · 点此开启云端大模型'}}</view>
       </view>
       <switch checked="{{cloudEnhanced}}" catchchange="toggleCloud" />
     </view>

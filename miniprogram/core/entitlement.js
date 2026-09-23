@@ -51,8 +51,8 @@ function restorePro(ent) {
   return ent;
 }
 
-// ---- 云端模型服务额度（天猫黑客松 AI 服务版） ----
-// 免费用户消耗 cloudCredits（加油包），Pro 订阅云端不限次。
+// ---- 云端模型服务额度（商业化预留，当前版本 UI 无门控不使用）----
+// 厂商/平台在生态侧接入计费售卖时可启用：免费用户消耗 cloudCredits，Pro 不限次。
 
 /** Pro 云端不限次；免费返回剩余云端次数（旧存量数据无该字段时视为 0）。 */
 function remainingCloudCredits(ent) {

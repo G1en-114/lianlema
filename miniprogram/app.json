@@ -6,8 +6,7 @@
     "pages/assessment/assessment",
     "pages/training/training",
     "pages/report/report",
-    "pages/coach/coach",
-    "pages/paywall/paywall"
+    "pages/coach/coach"
   ],
   "window": {
     "navigationBarBackgroundColor": "#ffffff",

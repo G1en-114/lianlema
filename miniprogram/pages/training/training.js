@@ -8,7 +8,6 @@ const { demoPoseProvider } = require('../../providers/pose/demoPoseProvider');
 const { voiceProvider } = require('../../providers/voice/voiceProvider');
 const coachProvider = require('../../providers/coach/coachProvider');
 const { modelService, toCoco17 } = require('../../providers/model/modelServiceProvider');
-const entitlement = require('../../core/entitlement');
 
 const encourageCounters = { set_done: 0, last_rep: 0, streak_standard: 0, session_end: 0 };
 
@@ -289,20 +288,6 @@ Page({
   /** 组完成后的云端复盘：送关键点序列做动作分析 + LLM 生成复盘要点（静默降级）。 */
   cloudReview(ex) {
     if (!this.data.cloudEnhanced || !modelService.available()) return;
-
-    const s = store.getState();
-    if (!entitlement.canUseCloud(s.entitlement)) {
-      wx.showModal({
-        title: '云端 AI 额度',
-        content: '云端动作分析需要 Pro 订阅或按次加油包（演示环境模拟解锁）。',
-        confirmText: '去查看',
-        success: (r) => { if (r.confirm) wx.navigateTo({ url: '/pages/paywall/paywall' }); },
-      });
-      return;
-    }
-    const ent = entitlement.consumeCloudCredit(s.entitlement);
-    store.setState({ entitlement: ent });
-    require('../../providers/repo/index').getRepo().saveEntitlement(ent);
 
     const frames = this.kpBuffer.splice(0).map(toCoco17);
     const summary = `${ex.name} 第 ${this.setNo} 组完成，共 ${this.data.targetReps} 次`;
