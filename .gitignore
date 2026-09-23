@@ -90,3 +90,10 @@ dataset/readme.md
 /datas/
 /tools/mmfit_pose_11cls/
 /tools/mmfit_pose_11cls_stride48/
+
+# pytest 临时目录与模型服务计量库（本地运行产物）
+backend/.pytest_tmp/
+backend/model_usage.db
+backend/dev.db
+*.pyc
+__pycache__/

@@ -34,3 +34,5 @@ include = ["app*"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 asyncio_mode = "auto"
+# Windows 受限环境下系统临时目录可能不可写，统一用项目内 basetemp。
+addopts = "--basetemp=.pytest_tmp"

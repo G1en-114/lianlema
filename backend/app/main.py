@@ -8,6 +8,7 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
+from app.api.routes.model_service import router as model_service_router
 from app.core.logging import configure_logging
 from app.core.secrets import MissingSecretError
 
@@ -15,10 +16,12 @@ from app.core.secrets import MissingSecretError
 configure_logging()
 
 app = FastAPI(
-    title="练了吗 Backend",
-    description="AI 健身教练后端服务",
-    version="0.1.0",
+    title="小练 Daily Backend",
+    description="AI 健身教练模型服务（天猫黑客松智能日常赛道定制款）",
+    version="0.2.0",
 )
+
+app.include_router(model_service_router)
 
 
 @app.exception_handler(MissingSecretError)
