@@ -1,7 +1,7 @@
-/* 设计令牌：主色 #16A34A 运动绿；文本三级；750rpx 设计稿 */
+/* 设计令牌：主色 #F43F5E 珊瑚红（天猫定制款；回切微信版改回 #16A34A + #e8f7ee）*/
 page {
-  --brand: #16a34a;
-  --brand-weak: #e8f7ee;
+  --brand: #f43f5e;
+  --brand-weak: #ffe9ee;
   --danger: #dc2626;
   --warn: #d97706;
   --ink: #1f2937;

@@ -9,8 +9,8 @@ module.exports = {
   CLOUD_ENV_ID: '',
   FREE_QUOTA: 3,
   PAID_LABEL: '演示环境：模拟解锁，不产生真实扣费',
-  APP_NAME: '练了吗',
-  SLOGAN: '你今天练了吗？',
+  APP_NAME: '小练 Daily',
+  SLOGAN: '每天动一动，AI 教练在身边',
   // AI 文案润色（微信 AI 生态·云开发大模型）：默认关闭，全部使用模板文案。
   // 开启步骤见 README《启用 AI 文案润色》：需配置云环境 + 部署 llmcoach 云函数。
   // 红线不变：AI 仅润色表达，动作分/计划等数值永远来自确定性模块，模板永远兜底。

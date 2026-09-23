@@ -2,7 +2,7 @@
   "compileType": "miniprogram",
   "libVersion": "3.8.0",
   "appid": "touristappid",
-  "projectname": "lian-le-ma",
+  "projectname": "xiao-lian-daily",
   "setting": {
     "es6": true,
     "enhance": true,
