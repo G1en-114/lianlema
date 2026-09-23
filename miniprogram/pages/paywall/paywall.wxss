@@ -1,0 +1,42 @@
+.page {
+  padding-top: 24rpx;
+}
+
+.hero {
+  text-align: center;
+  padding: 48rpx 32rpx;
+}
+
+.hero-title {
+  font-size: 52rpx;
+  font-weight: 700;
+  margin-bottom: 8rpx;
+}
+
+.benefit-row {
+  display: flex;
+  align-items: flex-start;
+  padding: 14rpx 0;
+  font-size: 30rpx;
+}
+
+.check {
+  color: var(--brand);
+  font-weight: 700;
+  margin-right: 16rpx;
+}
+
+.demo-note {
+  background: #fef3c7;
+  color: var(--warn);
+  border-radius: 12rpx;
+  padding: 16rpx 20rpx;
+  font-size: 26rpx;
+  text-align: center;
+}
+
+.fine-print {
+  font-size: 22rpx;
+  text-align: center;
+  margin-top: 16rpx;
+}

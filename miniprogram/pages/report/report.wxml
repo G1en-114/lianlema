@@ -1,0 +1,38 @@
+<view class="page safe-bottom" wx:if="{{report}}">
+  <view class="card score-card">
+    <view class="card-title">训练报告 <text class="muted date">{{dateText}}</text></view>
+    <view class="score-ring" style="--deg: {{report.formScore * 3.6}}deg;">
+      <view class="score-inner">
+        <view class="score-num">{{report.formScore}}</view>
+        <view class="score-label">动作分</view>
+      </view>
+    </view>
+    <view class="stat-row">
+      <view class="stat">
+        <view class="stat-num">{{report.correctionCount}}</view>
+        <view class="stat-label">纠正次数</view>
+      </view>
+      <view class="stat">
+        <view class="stat-num">{{report.formScore >= 80 ? '优' : report.formScore >= 60 ? '良' : '加油'}}</view>
+        <view class="stat-label">评价</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="card-title">风险提示</view>
+    <view wx:for="{{report.riskNotes}}" wx:key="*this" class="note-line">· {{item}}</view>
+  </view>
+
+  <view class="card">
+    <view class="card-title">下一次训练重点</view>
+    <view class="note-line">{{report.nextFocus}}</view>
+  </view>
+
+  <view class="card" wx:if="{{report.summaryText}}">
+    <view class="card-title">教练小结</view>
+    <view class="note-line">{{report.summaryText}}</view>
+  </view>
+
+  <button wx:if="{{!fromHistory}}" class="btn btn-primary" bindtap="backToPlan">完成，回到计划</button>
+</view>

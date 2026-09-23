@@ -1,0 +1,79 @@
+<view class="page safe-bottom">
+  <view class="card">
+    <view class="card-title">训练目标 <text wx:if="{{missing.goal}}" class="miss">必选</text></view>
+    <view class="chip-grid">
+      <view
+        wx:for="{{goals}}"
+        wx:key="value"
+        class="chip {{form.goal === item.value ? 'chip-active' : ''}}"
+        data-value="{{item.value}}"
+        bindtap="onGoalTap"
+      >{{item.label}}</view>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="card-title">训练场地 <text wx:if="{{missing.venue}}" class="miss">必选</text></view>
+    <view class="chip-grid">
+      <view
+        wx:for="{{venues}}"
+        wx:key="value"
+        class="chip {{form.venue === item.value ? 'chip-active' : ''}}"
+        data-value="{{item.value}}"
+        bindtap="onVenueTap"
+      >{{item.label}}</view>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="card-title">可用器械（可多选）</view>
+    <view class="chip-grid">
+      <view
+        wx:for="{{equipments}}"
+        wx:key="value"
+        class="chip {{form.equipment.indexOf(item.value) > -1 ? 'chip-active' : ''}}"
+        data-value="{{item.value}}"
+        bindtap="onEquipmentTap"
+      >{{item.label}}</view>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="card-title">每周频率 <text wx:if="{{missing.weeklyFrequency}}" class="miss">必选</text></view>
+    <picker mode="selector" range="{{frequency}}" bindchange="onFrequencyPick">
+      <view class="picker-value">每周 {{form.weeklyFrequency}} 次</view>
+    </picker>
+  </view>
+
+  <view class="card">
+    <view class="card-title">伤痛风险自评</view>
+    <label class="consent-row">
+      <checkbox-group bindchange="onConsentChange">
+        <checkbox value="yes" checked="{{sensitiveConsent}}" />
+      </checkbox-group>
+      <view class="consent-text">
+        我已知悉：伤痛自评属于<text class="strong">敏感健康信息</text>，仅用于本地生成计划与规避动作；勾选后才会展开填写，可随时在「我的-隐私中心」撤回。
+      </view>
+    </label>
+
+    <block wx:if="{{sensitiveConsent}}">
+      <view wx:for="{{injuryAreas}}" wx:key="value" class="injury-row">
+        <view class="injury-label">{{item.label}}</view>
+        <view class="level-group">
+          <view
+            wx:for="{{levels}}"
+            wx:for-item="lv"
+            wx:key="value"
+            class="level-chip {{injuryLevels[item.value] === lv.value ? 'chip-active' : ''}}"
+            data-area="{{item.value}}"
+            data-value="{{lv.value}}"
+            bindtap="onInjuryLevelTap"
+          >{{lv.label}}</view>
+        </view>
+      </view>
+    </block>
+    <view wx:else class="muted consent-tip">未勾选同意则跳过此项，计划不含伤痛规避。</view>
+  </view>
+
+  <button class="btn btn-primary" bindtap="submit">生成我的 7 天计划</button>
+</view>

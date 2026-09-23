@@ -1,0 +1,32 @@
+.page {
+  padding-top: 24rpx;
+}
+
+.ent-line {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: var(--brand);
+}
+
+.perm-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16rpx 0;
+  font-size: 28rpx;
+}
+
+.consent-row {
+  border-top: 2rpx solid var(--line);
+  margin-top: 8rpx;
+}
+
+.about-line {
+  padding: 6rpx 0;
+}
+
+.about-link {
+  color: var(--brand);
+  font-size: 28rpx;
+  padding: 6rpx 0;
+}

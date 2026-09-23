@@ -1,0 +1,74 @@
+.page {
+  padding-top: 24rpx;
+}
+
+.chip-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.miss {
+  font-size: 24rpx;
+  color: var(--danger);
+  font-weight: 400;
+  margin-left: 12rpx;
+}
+
+.picker-value {
+  min-height: 88rpx;
+  display: flex;
+  align-items: center;
+  font-size: 32rpx;
+  color: var(--brand);
+  font-weight: 600;
+}
+
+.consent-row {
+  display: flex;
+  align-items: flex-start;
+  padding: 8rpx 0 16rpx;
+}
+
+.consent-text {
+  flex: 1;
+  font-size: 26rpx;
+  color: var(--ink-2);
+  margin-left: 8rpx;
+}
+
+.strong {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.consent-tip {
+  font-size: 24rpx;
+}
+
+.injury-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16rpx 0;
+  border-top: 2rpx solid var(--line);
+}
+
+.injury-label {
+  font-size: 30rpx;
+}
+
+.level-group {
+  display: flex;
+  gap: 12rpx;
+}
+
+.level-chip {
+  min-height: 64rpx;
+  display: flex;
+  align-items: center;
+  padding: 4rpx 20rpx;
+  border-radius: 12rpx;
+  border: 2rpx solid var(--line);
+  font-size: 26rpx;
+}

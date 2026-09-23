@@ -1,0 +1,23 @@
+.page {
+  padding-top: 24rpx;
+}
+
+.session-item {
+  padding: 28rpx 32rpx;
+}
+
+.item-hover {
+  background: #f0fdf4;
+}
+
+.item-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8rpx;
+}
+
+.item-date {
+  font-size: 30rpx;
+  font-weight: 600;
+}

@@ -1,0 +1,20 @@
+<view class="page safe-bottom">
+  <view class="card hero">
+    <view class="hero-title">练了吗 Pro</view>
+    <view class="muted">解锁完整 AI 健身教练体验</view>
+  </view>
+
+  <view class="card">
+    <view wx:for="{{benefits}}" wx:key="*this" class="benefit-row">
+      <text class="check">✓</text>
+      <text>{{item}}</text>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="demo-note">{{paidLabel}}</view>
+    <button class="btn btn-primary" bindtap="purchase">立即解锁（模拟）</button>
+    <button class="btn btn-plain" bindtap="restore">恢复购买</button>
+    <view class="muted fine-print">正式版接入微信支付后，此处将展示真实价格与支付流程。</view>
+  </view>
+</view>

@@ -1,0 +1,45 @@
+<view class="page">
+  <view class="hero card">
+    <view class="hero-title">{{slogan}}</view>
+    <block wx:if="{{!hasAssessment}}">
+      <view class="muted">先花一分钟完成运动评估，我会按你的目标、场地与伤痛情况排好 7 天计划。</view>
+      <button class="btn btn-primary" bindtap="goAssessment">开始运动评估</button>
+    </block>
+    <block wx:else>
+      <view class="hero-meta">{{remainingFreeText}}</view>
+    </block>
+  </view>
+
+  <block wx:if="{{hasAssessment}}">
+    <scroll-view scroll-x class="week-strip" enhanced show-scrollbar="{{false}}">
+      <view
+        wx:for="{{weekStrip}}"
+        wx:key="dayIndex"
+        class="day-chip {{item.isToday ? 'day-chip-today' : ''}}"
+      >
+        <view class="day-num">D{{item.dayIndex}}</view>
+        <view class="day-state">{{item.isRestDay ? '休息' : item.count + ' 个动作'}}</view>
+      </view>
+    </scroll-view>
+
+    <view class="card">
+      <view class="card-title">今日训练 · {{todayLabel}}</view>
+      <block wx:if="{{isRestDay}}">
+        <view class="muted">休息日：拉伸、散步或早点睡，都是训练的一部分。</view>
+      </block>
+      <block wx:else>
+        <view wx:for="{{exercises}}" wx:key="name" class="exercise-row">
+          <view class="exercise-name">{{item.name}}</view>
+          <view class="exercise-meta muted">{{item.sets}} 组 × {{item.reps}} 次 · 休息 {{item.restSec}}s</view>
+          <view wx:if="{{item.regressionNote}}" class="regression-note">{{item.regressionNote}}</view>
+        </view>
+      </block>
+      <button class="btn btn-primary" disabled="{{!canStart}}" bindtap="startTraining">
+        {{isRestDay ? '休息日' : '开始训练'}}
+      </button>
+      <view wx:if="{{!canStart && !isRestDay}}" class="quota-tip muted" bindtap="goPaywall">
+        免费额度已用完，查看会员权益 →
+      </view>
+    </view>
+  </block>
+</view>

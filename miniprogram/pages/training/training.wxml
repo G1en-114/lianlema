@@ -1,0 +1,77 @@
+<view class="page safe-bottom">
+  <!-- 相机 / 演示模式区域 -->
+  <view class="camera-area">
+    <camera
+      wx:if="{{poseMode === 'vk'}}"
+      class="camera"
+      device-position="front"
+      flash="off"
+      frame-size="medium"
+      resolution="medium"
+    ></camera>
+    <view wx:else class="camera camera-demo">
+      <view class="demo-icon">🏃</view>
+      <view class="demo-text">演示模式：未启用姿态识别</view>
+      <view class="demo-sub">按节奏完成动作，手动确认计数</view>
+    </view>
+    <canvas type="2d" id="poseCanvas" class="pose-canvas"></canvas>
+
+    <view class="hud">
+      <view class="hud-item">
+        <view class="hud-num">{{repCount}}/{{targetReps}}</view>
+        <view class="hud-label">次数</view>
+      </view>
+      <view class="hud-item">
+        <view class="hud-num">{{setNo}}/{{totalSets}}</view>
+        <view class="hud-label">组数</view>
+      </view>
+      <view wx:if="{{poseMode === 'vk'}}" class="hud-item">
+        <view class="hud-num">{{primaryAngle}}°</view>
+        <view class="hud-label">关节角</view>
+      </view>
+    </view>
+
+    <view wx:if="{{paused}}" class="pause-mask"><text>已暂停</text></view>
+    <view wx:if="{{resting}}" class="pause-mask rest">
+      <text class="rest-num">{{restLeft}}s</text>
+      <text>组间休息</text>
+    </view>
+  </view>
+
+  <!-- 当前动作与教练消息 -->
+  <view class="card session-card">
+    <view class="session-head">
+      <view class="card-title">{{exerciseName}}</view>
+      <view class="badge {{poseMode === 'vk' ? '' : 'badge-warn'}}">
+        {{poseMode === 'vk' ? '姿态识别中' : '演示模式'}}
+      </view>
+    </view>
+    <view wx:if="{{exerciseNote}}" class="regression-note">{{exerciseNote}}</view>
+    <view class="coach-banner {{messageIsCorrection ? 'coach-banner-fix' : ''}}">
+      <text>🎧 {{message}}</text>
+    </view>
+
+    <!-- 控制区 -->
+    <view class="ctrl-grid">
+      <view class="ctrl" bindtap="togglePause">{{paused ? '继续' : '暂停'}}</view>
+      <view class="ctrl" bindtap="switchExercise">换动作</view>
+      <view class="ctrl" bindtap="reduceDifficulty">降低难度</view>
+      <view class="ctrl" bindtap="repeatMessage">再说一遍</view>
+    </view>
+
+    <view wx:if="{{poseMode === 'demo' && !resting && !paused}}" class="btn btn-primary" bindtap="manualRep">
+      确认完成一次（{{repCount}}/{{targetReps}}）
+    </view>
+
+    <view wx:if="{{voiceAvailable}}" class="voice-row">
+      <button
+        class="voice-btn {{recording ? 'voice-btn-rec' : ''}}"
+        bindtouchstart="onVoiceStart"
+        bindtouchend="onVoiceEnd"
+      >{{recording ? '正在听… 松开发送' : '按住 说话控制'}}</button>
+      <view class="muted voice-tip">试试「暂停 / 继续 / 换动作 / 降低难度 / 再说一遍 / 结束」</view>
+    </view>
+
+    <button class="btn btn-danger-plain" bindtap="confirmEnd">结束训练</button>
+  </view>
+</view>

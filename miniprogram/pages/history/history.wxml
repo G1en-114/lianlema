@@ -1,0 +1,25 @@
+<view class="page">
+  <block wx:if="{{empty}}">
+    <view class="empty">
+      <view class="empty-icon">🏋️</view>
+      <view>还没有训练记录</view>
+      <view class="muted">完成第一次训练，报告会出现在这里</view>
+    </view>
+  </block>
+  <block wx:else>
+    <view
+      wx:for="{{sessions}}"
+      wx:key="id"
+      class="card session-item"
+      data-id="{{item.id}}"
+      bindtap="openReport"
+      hover-class="item-hover"
+    >
+      <view class="item-head">
+        <view class="item-date">{{item.dateText}}</view>
+        <view class="badge">{{item.report.formScore}} 分</view>
+      </view>
+      <view class="muted">纠正 {{item.report.correctionCount}} 次 · {{item.report.nextFocus}}</view>
+    </view>
+  </block>
+</view>

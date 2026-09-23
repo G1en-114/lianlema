@@ -1,0 +1,10 @@
+{
+  "name": "llmcoach",
+  "version": "1.0.0",
+  "description": "练了吗：教练文案 AI 润色（混元 + 内容安全检查，模板兜底）",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3",
+    "tencentcloud-sdk-nodejs-hunyuan": "^4.0.900"
+  }
+}

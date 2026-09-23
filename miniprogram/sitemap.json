@@ -1,0 +1,9 @@
+{
+  "desc": "练了吗 AI 健身教练小程序",
+  "rules": [
+    {
+      "action": "allow",
+      "page": "*"
+    }
+  ]
+}

@@ -1,0 +1,69 @@
+.page {
+  padding-top: 24rpx;
+}
+
+.score-card {
+  text-align: center;
+}
+
+.date {
+  font-weight: 400;
+  margin-left: 12rpx;
+  font-size: 24rpx;
+}
+
+.score-ring {
+  width: 280rpx;
+  height: 280rpx;
+  border-radius: 50%;
+  margin: 24rpx auto;
+  background: conic-gradient(var(--brand) var(--deg), var(--line) 0deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.score-inner {
+  width: 220rpx;
+  height: 220rpx;
+  border-radius: 50%;
+  background: var(--card);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.score-num {
+  font-size: 88rpx;
+  font-weight: 700;
+  color: var(--brand);
+  line-height: 1.1;
+}
+
+.score-label {
+  font-size: 24rpx;
+  color: var(--ink-2);
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 16rpx;
+}
+
+.stat-num {
+  font-size: 40rpx;
+  font-weight: 700;
+}
+
+.stat-label {
+  font-size: 24rpx;
+  color: var(--ink-2);
+}
+
+.note-line {
+  font-size: 28rpx;
+  color: var(--ink);
+  padding: 8rpx 0;
+}

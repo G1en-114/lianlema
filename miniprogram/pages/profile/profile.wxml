@@ -1,0 +1,39 @@
+<view class="page safe-bottom">
+  <view class="card">
+    <view class="card-title">我的会员</view>
+    <view class="ent-line">{{entitlementText}}</view>
+    <button wx:if="{{!isPro}}" class="btn btn-primary" bindtap="goPaywall">升级 Pro（演示）</button>
+  </view>
+
+  <view class="card">
+    <view class="card-title">授权与隐私中心</view>
+    <view class="perm-row">
+      <view>摄像头（动作纠错）</view>
+      <view class="badge {{cameraAuth ? '' : 'badge-warn'}}">{{cameraAuth ? '已授权' : '未授权'}}</view>
+    </view>
+    <view class="perm-row">
+      <view>麦克风（语音命令）</view>
+      <view class="badge {{recordAuth ? '' : 'badge-warn'}}">{{recordAuth ? '已授权' : '未授权'}}</view>
+    </view>
+    <button class="btn btn-plain" bindtap="openSetting">管理系统授权</button>
+
+    <view class="perm-row consent-row">
+      <view>伤痛自评（敏感健康信息）</view>
+      <view class="badge {{consentGranted ? '' : 'badge-warn'}}">{{consentGranted ? '已同意' : '未同意/已撤回'}}</view>
+    </view>
+    <button wx:if="{{consentGranted}}" class="btn btn-danger-plain" bindtap="revokeConsent">撤回同意并清空</button>
+  </view>
+
+  <view class="card">
+    <view class="card-title">数据与隐私</view>
+    <view class="muted about-line">数据存储：{{repoMode === 'cloud' ? '你的微信云开发环境（仅本人可读写）' : '本机本地存储，不上传服务器'}}</view>
+    <view class="about-link" bindtap="openPrivacyContract">《用户隐私保护指引》</view>
+    <button class="btn btn-danger-plain" bindtap="clearData">清除我的全部数据</button>
+  </view>
+
+  <view class="card">
+    <view class="card-title">关于练了吗</view>
+    <view class="muted about-line">AI 健身教练小程序 · 大赛参赛版 v1.0</view>
+    <view class="muted about-line">动作分、训练计划均由确定性算法生成；动作判定基于端侧姿态识别。内容不构成医疗建议，训练时请量力而行。</view>
+  </view>
+</view>
